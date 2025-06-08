@@ -1,0 +1,35 @@
+services:
+  app:
+    build:
+      context: ./app
+    depends_on:
+      - db
+    environment:
+      - DB_HOST=db
+      - DB_PORT=5432
+      - DB_NAME=btcdb
+      - DB_USER=btcuser
+      - DB_PASSWORD=btcpass
+    networks:
+      - btc-net
+    dns:
+      - 8.8.8.8
+
+  db:
+    image: postgres:14
+    environment:
+      POSTGRES_DB: btcdb
+      POSTGRES_USER: btcuser
+      POSTGRES_PASSWORD: btcpass
+    ports:
+      - "5432:5432"
+    volumes:
+      - dbdata:/var/lib/postgresql/data
+    networks:
+      - btc-net
+
+volumes:
+  dbdata:
+
+networks:
+  btc-net:
